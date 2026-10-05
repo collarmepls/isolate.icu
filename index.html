@@ -33,12 +33,12 @@
     white-space: pre;
     color: #fff;
     user-select: none;
-    animation: boot 1.1s steps(6, end) both;
+    animation: reveal 1.6s cubic-bezier(.22, .61, .36, 1) both;
   }
 
-  @keyframes boot {
-    0%   { opacity: 0; clip-path: inset(0 0 100% 0); }
-    100% { opacity: 1; clip-path: inset(0 0 0 0); }
+  @keyframes reveal {
+    0%   { opacity: 0; filter: blur(6px); transform: translateY(-6px); }
+    100% { opacity: 1; filter: blur(0);   transform: translateY(0); }
   }
 
   /* ---------- profile grid ---------- */
@@ -101,9 +101,9 @@
 :    :: : :     : :  :   : :: : :   :   : :     :     : :: ::</pre>
 
 <nav class="grid" aria-label="Profiles">
-  <a class="card" href="/adhd">
+  <a class="card" href="adhd.html">
     <!-- swap this for your avatar -->
-    <img src="/assets/avatar.png" alt="" onerror="this.onerror=null;this.src='data:image/gif;base64,R0lGODlhAQABAAAAACH5BAEKAAEALAAAAAABAAEAAAICTAEAOw=='">
+    <img src="assets/avatar.png" alt="" onerror="this.onerror=null;this.src='data:image/gif;base64,R0lGODlhAQABAAAAACH5BAEKAAEALAAAAAABAAEAAAICTAEAOw=='">
     <span>adhd</span>
   </a>
 </nav>
