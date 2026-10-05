@@ -23,7 +23,8 @@
     --tile: rgba(255,255,255,.08);
   }
 
-  html, body { height: 100%; background: #e9e9e9; color: var(--white); }
+  html { height: 100%; background: #e9e9e9; }
+  body { height: 100%; background: transparent; color: var(--white); }
   body { font-family: "IBM Plex Mono", "DejaVu Sans Mono", Consolas, monospace; overflow-x: hidden; }
   button { font: inherit; color: inherit; background: none; border: 0; cursor: pointer; }
   a { color: inherit; text-decoration: none; }
@@ -32,7 +33,7 @@
   /* ---------- background ---------- */
   #bg {
     position: fixed; inset: 0; width: 100%; height: 100%;
-    object-fit: cover; z-index: -1;
+    object-fit: cover; z-index: 0;
     filter: brightness(.94);
   }
 
@@ -71,6 +72,7 @@
 
   /* ---------- layout ---------- */
   main {
+    position: relative; z-index: 1;
     min-height: 100%;
     display: flex; flex-direction: column; align-items: center; justify-content: center;
     gap: 24px;
