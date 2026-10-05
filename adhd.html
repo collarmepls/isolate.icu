@@ -6,10 +6,9 @@
 <title>adhd</title>
 <meta name="description" content="isolate.icu/adhd">
 <meta property="og:title" content="adhd">
-<meta property="og:url" content="https://isolate.icu/adhd">
 <meta property="og:type" content="profile">
-<meta name="theme-color" content="#000000">
-<link rel="icon" href="data:image/svg+xml,<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 100 100'><text y='.9em' font-size='90'>🖤</text></svg>">
+<meta name="theme-color" content="#ffffff">
+<link rel="icon" href="data:image/svg+xml,<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 100 100'><text y='.9em' font-size='90'>🤍</text></svg>">
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
 <link href="https://fonts.googleapis.com/css2?family=IBM+Plex+Mono:wght@400;500&display=swap" rel="stylesheet">
@@ -17,239 +16,197 @@
   *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
 
   :root {
-    --black: #000;
     --white: #fff;
-    --dim: #9a9a9a;
-    --line: rgba(255,255,255,.18);
-    --glass: rgba(0,0,0,.55);
+    --dim: rgba(255,255,255,.55);
+    --faint: rgba(255,255,255,.28);
+    --line: rgba(255,255,255,.14);
+    --glass: rgba(0,0,0,.38);
+    --tile: rgba(255,255,255,.07);
   }
 
-  html, body { height: 100%; background: var(--black); color: var(--white); }
-
-  body {
-    font-family: "IBM Plex Mono", "DejaVu Sans Mono", Consolas, monospace;
-    overflow-x: hidden;
-  }
-
+  html, body { height: 100%; background: #000; color: var(--white); }
+  body { font-family: "IBM Plex Mono", "DejaVu Sans Mono", Consolas, monospace; overflow-x: hidden; }
   button { font: inherit; color: inherit; background: none; border: 0; cursor: pointer; }
-  a { color: inherit; }
+  a { color: inherit; text-decoration: none; }
   :focus-visible { outline: 2px solid var(--white); outline-offset: 3px; }
 
   /* ---------- background ---------- */
   #bg {
-    position: fixed; inset: 0;
-    width: 100%; height: 100%;
-    object-fit: cover;
-    z-index: -2;
-    filter: grayscale(1) brightness(.45);
+    position: fixed; inset: 0; width: 100%; height: 100%;
+    object-fit: cover; z-index: -2;
+    filter: brightness(.55);
   }
-  .noise {
+  .vignette {
     position: fixed; inset: 0; z-index: -1; pointer-events: none;
-    background: radial-gradient(ellipse at center, transparent 30%, rgba(0,0,0,.85) 100%);
+    background: radial-gradient(ellipse at center, transparent 35%, rgba(0,0,0,.75) 100%);
   }
 
   /* ---------- click to enter ---------- */
   #enter {
     position: fixed; inset: 0; z-index: 50;
-    background: var(--black);
+    background: #000;
     display: flex; align-items: center; justify-content: center;
     cursor: pointer;
-    transition: opacity .6s ease;
+    transition: opacity .7s ease;
   }
-  #enter span { font-size: 15px; color: var(--dim); }
-  #enter span::after { content: "_"; animation: blink 1s steps(1) infinite; }
+  #enter span { font-size: 34px; animation: beat 2.4s ease-in-out infinite; }
   #enter.gone { opacity: 0; pointer-events: none; }
+  @keyframes beat { 0%,100% { transform: scale(1); opacity: .85; } 50% { transform: scale(1.12); opacity: 1; } }
 
-  @keyframes blink { 50% { opacity: 0; } }
-
-  /* ---------- home link ---------- */
-  .home {
-    position: fixed; top: 18px; left: 20px;
-    font-size: 13px; color: var(--dim); text-decoration: none;
-  }
+  .home { position: fixed; top: 18px; left: 20px; font-size: 13px; color: var(--dim); }
   .home:hover { color: var(--white); }
 
-  /* ---------- layout ---------- */
+  /* ---------- card ---------- */
   main {
     min-height: 100%;
     display: flex; align-items: center; justify-content: center;
-    padding: 72px 16px;
-    perspective: 1000px;
+    padding: 64px 16px;
+    perspective: 1100px;
   }
-
   .card {
-    width: 100%;
-    max-width: 440px;
+    width: 100%; max-width: 430px;
     background: var(--glass);
     border: 1px solid var(--line);
-    border-radius: 14px;
-    padding: 34px 26px 22px;
-    backdrop-filter: blur(10px);
-    -webkit-backdrop-filter: blur(10px);
+    border-radius: 18px;
+    padding: 32px 22px 18px;
+    backdrop-filter: blur(14px) saturate(1.2);
+    -webkit-backdrop-filter: blur(14px) saturate(1.2);
     text-align: center;
     transform-style: preserve-3d;
-    transition: transform .2s ease-out;
     opacity: 0;
+    transition: transform .25s ease-out;
   }
-  .card.show { opacity: 1; transition: transform .2s ease-out, opacity .8s ease; }
+  .card.show { opacity: 1; transition: transform .25s ease-out, opacity .9s ease; }
 
-  /* ---------- avatar ---------- */
   .avatar {
-    position: relative;
-    width: 108px; height: 108px;
-    margin: 0 auto 14px;
-  }
-  .avatar img.pfp {
-    width: 100%; height: 100%;
-    border-radius: 50%;
-    object-fit: cover;
-    border: 2px solid var(--white);
+    width: 104px; height: 104px; margin: 0 auto 12px;
+    border-radius: 50%; object-fit: cover; display: block;
+    border: 2px solid rgba(255,255,255,.85);
     background: #1a1a1a;
   }
-  .avatar img.deco {
-    position: absolute;
-    inset: -18%;
-    width: 136%; height: 136%;
-    pointer-events: none;
-  }
-
   h1 {
-    font-size: 26px;
-    font-weight: 500;
-    letter-spacing: .01em;
+    font-size: 27px; font-weight: 500;
+    text-shadow: 0 0 14px rgba(255,255,255,.55);
   }
 
   /* ---------- badges ---------- */
   .badges {
-    display: inline-flex; flex-wrap: wrap; justify-content: center;
-    gap: 4px;
-    margin-top: 10px;
-    padding: 4px 8px;
-    border: 1px solid var(--line);
-    border-radius: 8px;
+    display: inline-flex; flex-wrap: wrap; justify-content: center; gap: 4px;
+    margin-top: 10px; padding: 4px 8px;
+    background: var(--tile); border: 1px solid var(--line); border-radius: 9px;
   }
-  .badge {
-    position: relative;
-    width: 24px; height: 24px;
-    display: grid; place-items: center;
-    font-size: 14px;
-    cursor: default;
-  }
-  .badge::after {
-    content: attr(data-label);
-    position: absolute; bottom: calc(100% + 6px); left: 50%;
-    transform: translateX(-50%);
-    background: var(--white); color: var(--black);
+  .badge { position: relative; width: 24px; height: 24px; display: grid; place-items: center; font-size: 14px; cursor: default; }
+
+  /* shared tooltip */
+  [data-tip] { position: relative; }
+  [data-tip]::after {
+    content: attr(data-tip);
+    position: absolute; bottom: calc(100% + 8px); left: 50%;
+    transform: translate(-50%, 4px);
+    background: var(--white); color: #000;
     font-size: 11px; white-space: nowrap;
-    padding: 3px 7px; border-radius: 4px;
+    padding: 3px 8px; border-radius: 5px;
     opacity: 0; pointer-events: none;
-    transition: opacity .12s;
+    transition: opacity .15s, transform .15s;
+    z-index: 5;
   }
-  .badge:hover::after, .badge:focus-visible::after { opacity: 1; }
+  [data-tip]:hover::after, [data-tip]:focus-visible::after { opacity: 1; transform: translate(-50%, 0); }
 
-  /* ---------- bio + meta ---------- */
-  .bio {
-    margin-top: 14px;
-    min-height: 1.5em;
-    font-size: 14px;
-    line-height: 1.5;
-  }
-  .bio::after { content: "|"; color: var(--dim); animation: blink 1s steps(1) infinite; margin-left: 1px; }
+  .bio { margin-top: 12px; font-size: 13px; color: var(--dim); min-height: 1.4em; }
+  .bio:empty { display: none; }
 
-  .meta {
-    margin-top: 8px;
-    display: flex; justify-content: center; flex-wrap: wrap;
-    gap: 6px 16px;
-    font-size: 12px;
-    color: var(--dim);
-  }
-  .meta svg { width: 12px; height: 12px; vertical-align: -1px; margin-right: 4px; }
-
-  /* ---------- links (white tiles, same as the home cards) ---------- */
-  .links {
-    margin-top: 22px;
-    display: flex; flex-direction: column;
-    gap: 8px;
-  }
-  .link {
-    display: flex; align-items: center; gap: 12px;
-    background: var(--white); color: var(--black);
-    text-decoration: none;
-    border-radius: 8px;
-    padding: 10px 14px;
-    font-size: 14px;
-    text-align: left;
-    width: 100%;
-    transition: transform .12s ease;
-  }
-  .link:hover { transform: translateX(3px); }
-  .link img, .link svg.ico { width: 18px; height: 18px; flex: none; }
-  .link .label { flex: 1; min-width: 0; overflow: hidden; text-overflow: ellipsis; white-space: nowrap; }
-  .link .label small { color: #666; margin-left: 6px; }
-  .link .end { font-size: 12px; color: #666; }
-
-  /* ---------- music player ---------- */
-  .player {
-    margin-top: 22px;
-    border: 1px solid var(--line);
-    border-radius: 10px;
-    padding: 12px;
-    display: grid;
-    grid-template-columns: 52px 1fr;
-    gap: 6px 12px;
-    text-align: left;
-  }
-  .cover {
-    width: 52px; height: 52px; border-radius: 6px;
-    object-fit: cover; background: #1a1a1a;
-    grid-row: span 2;
-  }
-  .track { min-width: 0; align-self: end; }
-  .track .t { font-size: 13px; white-space: nowrap; overflow: hidden; text-overflow: ellipsis; }
-  .track .a { font-size: 11px; color: var(--dim); white-space: nowrap; overflow: hidden; text-overflow: ellipsis; }
-
-  .bar-row { display: flex; align-items: center; gap: 8px; font-size: 10px; color: var(--dim); }
-  .bar {
-    flex: 1; height: 3px; background: var(--line); border-radius: 2px;
-    cursor: pointer; position: relative;
-  }
-  .bar i { position: absolute; left: 0; top: 0; bottom: 0; width: 0; background: var(--white); border-radius: 2px; }
-
-  .controls {
-    grid-column: 1 / -1;
-    display: flex; align-items: center; justify-content: center;
-    gap: 18px;
-    margin-top: 2px;
-  }
-  .controls button { width: 30px; height: 30px; display: grid; place-items: center; border-radius: 50%; }
-  .controls button svg { width: 16px; height: 16px; fill: var(--white); }
-  .controls .play { background: var(--white); }
-  .controls .play svg { fill: var(--black); }
-  .vol { display: flex; align-items: center; gap: 6px; margin-left: 8px; }
-  .vol input { width: 70px; accent-color: var(--white); }
-
-  /* ---------- footer stats ---------- */
-  .stats {
+  /* ---------- icon links ---------- */
+  .icons {
     margin-top: 18px;
-    display: flex; justify-content: space-between;
-    font-size: 11px; color: var(--dim);
+    display: flex; justify-content: center; flex-wrap: wrap; gap: 10px;
+  }
+  .icon {
+    width: 46px; height: 46px; border-radius: 12px;
+    display: grid; place-items: center;
+    background: var(--tile); border: 1px solid var(--line);
+    transition: background .15s, transform .15s, box-shadow .15s;
+  }
+  .icon svg { width: 21px; height: 21px; fill: var(--white); filter: drop-shadow(0 0 5px rgba(255,255,255,.45)); }
+  .icon:hover { background: rgba(255,255,255,.16); transform: translateY(-2px); box-shadow: 0 0 16px rgba(255,255,255,.18); }
+
+  /* ---------- shared panel ---------- */
+  .panel {
+    margin-top: 12px;
+    background: var(--tile); border: 1px solid var(--line); border-radius: 12px;
+    padding: 10px 12px;
+    display: flex; align-items: center; gap: 12px;
+    text-align: left;
   }
 
-  .toast {
-    position: fixed; bottom: 24px; left: 50%;
-    transform: translate(-50%, 20px);
-    background: var(--white); color: var(--black);
-    font-size: 13px; padding: 8px 14px; border-radius: 6px;
-    opacity: 0; transition: opacity .2s, transform .2s;
-    pointer-events: none;
+  /* ---------- discord presence ---------- */
+  .dc-pfp { position: relative; width: 44px; height: 44px; flex: none; }
+  .dc-pfp img { width: 100%; height: 100%; border-radius: 50%; object-fit: cover; background: #1a1a1a; }
+  .dot {
+    position: absolute; right: -1px; bottom: -1px;
+    width: 13px; height: 13px; border-radius: 50%;
+    border: 3px solid #1b1b1b; background: #747f8d;
   }
-  .toast.on { opacity: 1; transform: translate(-50%, 0); }
+  .dot.online { background: #23a55a; }
+  .dot.idle   { background: #f0b232; }
+  .dot.dnd    { background: #f23f43; }
+  .dc-text { min-width: 0; flex: 1; }
+  .dc-name { font-size: 14px; }
+  .dc-act  { font-size: 11px; color: var(--dim); white-space: nowrap; overflow: hidden; text-overflow: ellipsis; }
+
+  /* ---------- player ---------- */
+  .cover { width: 52px; height: 52px; border-radius: 8px; object-fit: cover; flex: none; background: #1a1a1a; }
+  .pl-mid { flex: 1; min-width: 0; }
+  .pl-title  { font-size: 14px; white-space: nowrap; overflow: hidden; text-overflow: ellipsis; }
+  .pl-artist { font-size: 11px; color: var(--dim); }
+  .bar-row { display: flex; align-items: center; gap: 8px; margin-top: 6px; font-size: 10px; color: var(--dim); }
+  .bar { flex: 1; height: 4px; background: var(--line); border-radius: 2px; cursor: pointer; position: relative; }
+  .bar i { position: absolute; inset: 0 auto 0 0; width: 0; background: var(--white); border-radius: 2px; box-shadow: 0 0 8px rgba(255,255,255,.6); }
+  .pl-btn {
+    width: 38px; height: 38px; flex: none; border-radius: 50%;
+    background: var(--white); display: grid; place-items: center;
+  }
+  .pl-btn svg { width: 16px; height: 16px; fill: #000; }
+
+  /* ---------- lyrics ---------- */
+  .lyrics {
+    margin-top: 12px;
+    height: 84px;                         /* shows 3 lines */
+    overflow: hidden;
+    position: relative;
+    -webkit-mask-image: linear-gradient(transparent, #000 30%, #000 70%, transparent);
+            mask-image: linear-gradient(transparent, #000 30%, #000 70%, transparent);
+  }
+  .lyrics[hidden] { display: none; }
+  .lyrics ul {
+    list-style: none;
+    transition: transform .5s cubic-bezier(.22,.61,.36,1);
+  }
+  .lyrics li {
+    height: 28px; line-height: 28px;
+    font-size: 13px; color: var(--faint);
+    white-space: nowrap; overflow: hidden; text-overflow: ellipsis;
+    padding: 0 6px;
+    transition: color .35s, text-shadow .35s;
+  }
+  .lyrics li.on { color: var(--white); text-shadow: 0 0 10px rgba(255,255,255,.6); }
+
+  /* ---------- footer ---------- */
+  .stats { margin-top: 14px; display: flex; justify-content: center; gap: 6px; align-items: center; font-size: 11px; color: var(--dim); }
+  .stats svg { width: 13px; height: 13px; fill: currentColor; }
+
+  .vol {
+    position: fixed; right: 18px; top: 16px;
+    display: flex; align-items: center; gap: 8px;
+    font-size: 12px; color: var(--dim);
+  }
+  .vol svg { width: 16px; height: 16px; fill: var(--dim); }
+  .vol input { width: 80px; accent-color: #fff; }
 
   @media (max-width: 420px) {
-    .card { padding: 28px 16px 18px; }
-    .vol { display: none; }
+    .card { padding: 26px 14px 16px; }
+    .icon { width: 42px; height: 42px; }
+    .vol input { width: 60px; }
   }
-
   @media (prefers-reduced-motion: reduce) {
     *, *::before, *::after { animation: none !important; transition: none !important; }
   }
@@ -257,59 +214,58 @@
 </head>
 <body>
 
-<!-- background video (optional) — delete the tag or leave the file missing for plain black -->
-<video id="bg" autoplay muted loop playsinline onerror="this.remove()">
-  <source src="/assets/bg.mp4" type="video/mp4" onerror="document.getElementById('bg').remove()">
-</video>
-<div class="noise"></div>
+<video id="bg" autoplay muted loop playsinline preload="auto"></video>
+<div class="vignette"></div>
 
-<div id="enter" role="button" tabindex="0" aria-label="Enter"><span>click to enter</span></div>
+<div id="enter" role="button" tabindex="0" aria-label="Enter"><span>🤍</span></div>
 
-<a class="home" href="/">isolate</a>
+<a class="home" href="./">isolate</a>
+<label class="vol">
+  <svg viewBox="0 0 24 24"><path d="M3 9v6h4l5 5V4L7 9H3zm13.5 3A4.5 4.5 0 0 0 14 8v8a4.5 4.5 0 0 0 2.5-4z"/></svg>
+  <input type="range" id="vol" min="0" max="1" step="0.01" aria-label="Volume">
+</label>
 
 <main>
   <section class="card" id="card">
-    <div class="avatar">
-      <img class="pfp" id="pfp" alt="">
-      <img class="deco" id="deco" alt="" hidden>
-    </div>
-
+    <img class="avatar" id="avatar" alt="">
     <h1 id="name"></h1>
     <div class="badges" id="badges"></div>
     <p class="bio" id="bio"></p>
-    <div class="meta" id="meta"></div>
 
-    <div class="links" id="links"></div>
+    <nav class="icons" id="icons" aria-label="Links"></nav>
 
-    <div class="player" id="player">
-      <img class="cover" id="cover" alt="">
-      <div class="track">
-        <div class="t" id="trackTitle"></div>
-        <div class="a" id="trackArtist"></div>
-      </div>
-      <div class="bar-row">
-        <span id="cur">00:00</span>
-        <div class="bar" id="bar"><i id="fill"></i></div>
-        <span id="dur">00:00</span>
-      </div>
-      <div class="controls">
-        <button id="prev" aria-label="Previous track"><svg viewBox="0 0 24 24"><path d="M6 6h2v12H6zM9.5 12l8.5 6V6z"/></svg></button>
-        <button class="play" id="playBtn" aria-label="Play"><svg viewBox="0 0 24 24" id="playIcon"><path d="M8 5v14l11-7z"/></svg></button>
-        <button id="next" aria-label="Next track"><svg viewBox="0 0 24 24"><path d="M16 6h2v12h-2zM6 18l8.5-6L6 6z"/></svg></button>
-        <label class="vol"><svg viewBox="0 0 24 24" width="14" height="14" fill="#fff"><path d="M3 9v6h4l5 5V4L7 9H3z"/></svg>
-          <input type="range" id="vol" min="0" max="1" step="0.01" aria-label="Volume"></label>
+    <div class="panel" id="discord">
+      <div class="dc-pfp"><img id="dcPfp" alt=""><span class="dot" id="dcDot"></span></div>
+      <div class="dc-text">
+        <div class="dc-name" id="dcName"></div>
+        <div class="dc-act" id="dcAct">offline</div>
       </div>
     </div>
 
+    <div class="panel" id="player">
+      <img class="cover" id="cover" alt="">
+      <div class="pl-mid">
+        <div class="pl-title" id="plTitle"></div>
+        <div class="pl-artist" id="plArtist"></div>
+        <div class="bar-row">
+          <span id="cur">0:00</span>
+          <div class="bar" id="bar"><i id="fill"></i></div>
+          <span id="dur">0:00</span>
+        </div>
+      </div>
+      <button class="pl-btn" id="playBtn" aria-label="Play"><svg viewBox="0 0 24 24" id="playIcon"><path d="M8 5v14l11-7z"/></svg></button>
+    </div>
+
+    <div class="lyrics" id="lyrics" hidden><ul id="lyricList"></ul></div>
+
     <div class="stats">
+      <svg viewBox="0 0 24 24"><path d="M12 5C6 5 2 12 2 12s4 7 10 7 10-7 10-7-4-7-10-7zm0 11a4 4 0 1 1 0-8 4 4 0 0 1 0 8zm0-6a2 2 0 1 0 0 4 2 2 0 0 0 0-4z"/></svg>
       <span id="views"></span>
-      <span id="uid"></span>
     </div>
   </section>
 </main>
 
-<div class="toast" id="toast"></div>
-<audio id="audio" preload="metadata"></audio>
+<audio id="audio" preload="auto" loop></audio>
 
 <script>
 /* =====================================================
@@ -317,182 +273,207 @@
    ===================================================== */
 const CONFIG = {
   name: "adhd",
-  tabTitle: "adhd",                       // types itself in the browser tab
-  avatar: "/assets/avatar.png",
-  decoration: "",                          // optional gif overlay, e.g. "/assets/deco.gif"
-  bios: [                                  // cycles with a typing effect
-    "nothing to see here",
-    "isolate.icu"
-  ],
-  location: "",                            // leave "" to hide
-  joined: "",                              // e.g. "2026" — leave "" to hide
-  badges: [                                // icon = any emoji/symbol, label = tooltip
+  bio: "",                                   // leave "" to hide
+  discordId: "1509363313388159041",
+  // avatar: uses your Discord pfp when Lanyard is set up, otherwise this:
+  avatarFallback: "https://github.com/collarmepls.png",
+  background: "backgrounds/bg.mp4",
+  badges: [                                  // icon = emoji/symbol, label = tooltip
     { icon: "✦", label: "Owner" },
     { icon: "☾", label: "Night owl" },
     { icon: "⚡", label: "Early user" }
   ],
-  // icon = a slug from simpleicons.org (discord, github, spotify, youtube, steam, telegram,
-  // instagram, tiktok, x, twitch, kick, roblox...). Leave icon "" for a plain link icon.
   links: [
-    { icon: "github",   label: "GitHub",   sub: "",            url: "https://github.com/yourname" },
-    { icon: "telegram", label: "Telegram", sub: "",            url: "https://t.me/yourname" },
-    { icon: "steam",    label: "Steam",    sub: "",            url: "https://steamcommunity.com/id/yourname" },
-    { icon: "discord",  label: "Discord",  sub: "yourname",    copy: "yourname" }   // copy = click copies the text
+    { icon: "telegram", tip: "@verpiel",     url: "https://t.me/verpiel" },
+    { icon: "github",   tip: "@collarmepls", url: "https://github.com/collarmepls" },
+    { icon: "steam",    tip: "@pawramedic",  url: "https://steamcommunity.com/id/pawramedic/" },
+    { icon: "discord",  tip: "@pawramedic",  url: "https://discord.com/users/1509363313388159041" },
+    { icon: "roblox",   tip: "@pawstral",    url: "https://www.roblox.com/users/4910921500/profile" },
+    { icon: "namemc",   tip: "@yukria",      url: "https://namemc.com/profile/Yukria" }
   ],
-  tracks: [
-    { title: "track one", artist: "artist", src: "/assets/song1.mp3", cover: "/assets/cover1.jpg" },
-    { title: "track two", artist: "artist", src: "/assets/song2.mp3", cover: "/assets/cover2.jpg" }
-  ],
-  volume: 0.35,
-  views: 1337,                             // static number (real counting needs a backend)
-  uid: 1
+  song: {
+    title: "blossom",
+    artist: "morgue",
+    src: "songs/SpotiDownloader.com%20-%20blossom%20-%20morgue.mp3",
+    cover: "data:image/jpeg;base64,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",
+    lrclibId: 38216520,                      // lyrics are loaded live from lrclib.net
+    lrcFile: ""                              // or your own .lrc file, e.g. "songs/blossom.lrc"
+  },
+  volume: 0.3,
+  views: 1337                                // static number (real counting needs a backend)
 };
 /* ===================================================== */
 
+const ICONS = {"telegram":"M11.944 0A12 12 0 0 0 0 12a12 12 0 0 0 12 12 12 12 0 0 0 12-12A12 12 0 0 0 12 0a12 12 0 0 0-.056 0zm4.962 7.224c.1-.002.321.023.465.14a.506.506 0 0 1 .171.325c.016.093.036.306.02.472-.18 1.898-.962 6.502-1.36 8.627-.168.9-.499 1.201-.82 1.23-.696.065-1.225-.46-1.9-.902-1.056-.693-1.653-1.124-2.678-1.8-1.185-.78-.417-1.21.258-1.91.177-.184 3.247-2.977 3.307-3.23.007-.032.014-.15-.056-.212s-.174-.041-.249-.024c-.106.024-1.793 1.14-5.061 3.345-.48.33-.913.49-1.302.48-.428-.008-1.252-.241-1.865-.44-.752-.245-1.349-.374-1.297-.789.027-.216.325-.437.893-.663 3.498-1.524 5.83-2.529 6.998-3.014 3.332-1.386 4.025-1.627 4.476-1.635z","github":"M12 .297c-6.63 0-12 5.373-12 12 0 5.303 3.438 9.8 8.205 11.385.6.113.82-.258.82-.577 0-.285-.01-1.04-.015-2.04-3.338.724-4.042-1.61-4.042-1.61C4.422 18.07 3.633 17.7 3.633 17.7c-1.087-.744.084-.729.084-.729 1.205.084 1.838 1.236 1.838 1.236 1.07 1.835 2.809 1.305 3.495.998.108-.776.417-1.305.76-1.605-2.665-.3-5.466-1.332-5.466-5.93 0-1.31.465-2.38 1.235-3.22-.135-.303-.54-1.523.105-3.176 0 0 1.005-.322 3.3 1.23.96-.267 1.98-.399 3-.405 1.02.006 2.04.138 3 .405 2.28-1.552 3.285-1.23 3.285-1.23.645 1.653.24 2.873.12 3.176.765.84 1.23 1.91 1.23 3.22 0 4.61-2.805 5.625-5.475 5.92.42.36.81 1.096.81 2.22 0 1.606-.015 2.896-.015 3.286 0 .315.21.69.825.57C20.565 22.092 24 17.592 24 12.297c0-6.627-5.373-12-12-12","steam":"M11.979 0C5.678 0 .511 4.86.022 11.037l6.432 2.658c.545-.371 1.203-.59 1.912-.59.063 0 .125.004.188.006l2.861-4.142V8.91c0-2.495 2.028-4.524 4.524-4.524 2.494 0 4.524 2.031 4.524 4.527s-2.03 4.525-4.524 4.525h-.105l-4.076 2.911c0 .052.004.105.004.159 0 1.875-1.515 3.396-3.39 3.396-1.635 0-3.016-1.173-3.331-2.727L.436 15.27C1.862 20.307 6.486 24 11.979 24c6.627 0 11.999-5.373 11.999-12S18.605 0 11.979 0zM7.54 18.21l-1.473-.61c.262.543.714.999 1.314 1.25 1.297.539 2.793-.076 3.332-1.375.263-.63.264-1.319.005-1.949s-.75-1.121-1.377-1.383c-.624-.26-1.29-.249-1.878-.03l1.523.63c.956.4 1.409 1.5 1.009 2.455-.397.957-1.497 1.41-2.454 1.012H7.54zm11.415-9.303c0-1.662-1.353-3.015-3.015-3.015-1.665 0-3.015 1.353-3.015 3.015 0 1.665 1.35 3.015 3.015 3.015 1.663 0 3.015-1.35 3.015-3.015zm-5.273-.005c0-1.252 1.013-2.266 2.265-2.266 1.249 0 2.266 1.014 2.266 2.266 0 1.251-1.017 2.265-2.266 2.265-1.253 0-2.265-1.014-2.265-2.265z","discord":"M20.317 4.3698a19.7913 19.7913 0 00-4.8851-1.5152.0741.0741 0 00-.0785.0371c-.211.3753-.4447.8648-.6083 1.2495-1.8447-.2762-3.68-.2762-5.4868 0-.1636-.3933-.4058-.8742-.6177-1.2495a.077.077 0 00-.0785-.037 19.7363 19.7363 0 00-4.8852 1.515.0699.0699 0 00-.0321.0277C.5334 9.0458-.319 13.5799.0992 18.0578a.0824.0824 0 00.0312.0561c2.0528 1.5076 4.0413 2.4228 5.9929 3.0294a.0777.0777 0 00.0842-.0276c.4616-.6304.8731-1.2952 1.226-1.9942a.076.076 0 00-.0416-.1057c-.6528-.2476-1.2743-.5495-1.8722-.8923a.077.077 0 01-.0076-.1277c.1258-.0943.2517-.1923.3718-.2914a.0743.0743 0 01.0776-.0105c3.9278 1.7933 8.18 1.7933 12.0614 0a.0739.0739 0 01.0785.0095c.1202.099.246.1981.3728.2924a.077.077 0 01-.0066.1276 12.2986 12.2986 0 01-1.873.8914.0766.0766 0 00-.0407.1067c.3604.698.7719 1.3628 1.225 1.9932a.076.076 0 00.0842.0286c1.961-.6067 3.9495-1.5219 6.0023-3.0294a.077.077 0 00.0313-.0552c.5004-5.177-.8382-9.6739-3.5485-13.6604a.061.061 0 00-.0312-.0286zM8.02 15.3312c-1.1825 0-2.1569-1.0857-2.1569-2.419 0-1.3332.9555-2.4189 2.157-2.4189 1.2108 0 2.1757 1.0952 2.1568 2.419 0 1.3332-.9555 2.4189-2.1569 2.4189zm7.9748 0c-1.1825 0-2.1569-1.0857-2.1569-2.419 0-1.3332.9554-2.4189 2.1569-2.4189 1.2108 0 2.1757 1.0952 2.1568 2.419 0 1.3332-.946 2.4189-2.1568 2.4189Z","roblox":"M18.926 23.998 0 18.892 5.075.002 24 5.108ZM15.348 10.09l-5.282-1.453-1.414 5.273 5.282 1.453z","namemc":"M0 0v24h24V0Zm4.8 4.8H16V8h3.2v11.2H16V8H8v11.2H4.8V8Z"};
 const $ = id => document.getElementById(id);
 const BLANK = "data:image/gif;base64,R0lGODlhAQABAAAAACH5BAEKAAEALAAAAAABAAEAAAICTAEAOw==";
-const safeImg = img => img.addEventListener("error", () => { img.src = BLANK; }, { once: true });
-safeImg($("pfp")); safeImg($("cover"));
+const reduce = matchMedia("(prefers-reduced-motion: reduce)").matches;
 
-/* ---------- render profile ---------- */
+/* ---------- background ---------- */
+const bg = $("bg");
+bg.src = CONFIG.background;
+bg.addEventListener("error", () => bg.remove());
+
+/* ---------- profile ---------- */
 $("name").textContent = CONFIG.name;
-$("pfp").src = CONFIG.avatar;
-if (CONFIG.decoration) { $("deco").src = CONFIG.decoration; $("deco").hidden = false; }
+$("bio").textContent = CONFIG.bio;
+$("avatar").src = CONFIG.avatarFallback;
+$("avatar").addEventListener("error", e => e.target.src = BLANK, { once: true });
 
-const badgeBox = $("badges");
-if (!CONFIG.badges.length) badgeBox.remove();
+if (!CONFIG.badges.length) $("badges").remove();
 CONFIG.badges.forEach(b => {
   const el = document.createElement("span");
-  el.className = "badge";
-  el.tabIndex = 0;
-  el.dataset.label = b.label;
-  el.setAttribute("aria-label", b.label);
+  el.className = "badge"; el.tabIndex = 0;
+  el.dataset.tip = b.label; el.setAttribute("aria-label", b.label);
   el.textContent = b.icon;
-  badgeBox.appendChild(el);
+  $("badges").appendChild(el);
 });
-
-const pin = '<svg viewBox="0 0 24 24" fill="currentColor"><path d="M12 2a7 7 0 0 0-7 7c0 5 7 13 7 13s7-8 7-13a7 7 0 0 0-7-7zm0 9.5A2.5 2.5 0 1 1 12 6.5a2.5 2.5 0 0 1 0 5z"/></svg>';
-const cal = '<svg viewBox="0 0 24 24" fill="currentColor"><path d="M7 2v2H4v18h16V4h-3V2h-2v2H9V2H7zm-1 8h12v10H6V10z"/></svg>';
-if (CONFIG.location) $("meta").insertAdjacentHTML("beforeend", `<span>${pin}${CONFIG.location}</span>`);
-if (CONFIG.joined)   $("meta").insertAdjacentHTML("beforeend", `<span>${cal}joined ${CONFIG.joined}</span>`);
-
-const linkIco = '<svg class="ico" viewBox="0 0 24 24" fill="#000"><path d="M10.6 13.4a1 1 0 0 1 0-1.4l3.5-3.5a1 1 0 1 1 1.4 1.4L12 13.4a1 1 0 0 1-1.4 0zM8 21a5 5 0 0 1-3.5-8.5l2-2a1 1 0 1 1 1.4 1.4l-2 2A3 3 0 0 0 10.1 18l2-2a1 1 0 0 1 1.4 1.4l-2 2A5 5 0 0 1 8 21zm9.5-7.1a1 1 0 0 1-.7-1.7l2-2a3 3 0 0 0-4.2-4.3l-2 2a1 1 0 0 1-1.4-1.4l2-2a5 5 0 0 1 7 7l-2 2a1 1 0 0 1-.7.4z"/></svg>';
 
 CONFIG.links.forEach(l => {
-  const el = document.createElement(l.copy ? "button" : "a");
-  el.className = "link";
-  if (!l.copy) { el.href = l.url; el.target = "_blank"; el.rel = "noopener"; }
-  const ico = l.icon ? `<img src="https://cdn.simpleicons.org/${l.icon}/000000" alt="" loading="lazy" onerror="this.style.visibility=\'hidden\'">` : linkIco;
-  const sub = l.sub ? `<small>${l.sub}</small>` : "";
-  el.innerHTML = `${ico}<span class="label">${l.label}${sub}</span><span class="end">${l.copy ? "copy" : "↗"}</span>`;
-  if (l.copy) el.addEventListener("click", () => {
-    navigator.clipboard.writeText(l.copy).then(() => toast(`copied ${l.copy}`));
-  });
-  $("links").appendChild(el);
+  const a = document.createElement("a");
+  a.className = "icon"; a.href = l.url; a.target = "_blank"; a.rel = "noopener";
+  a.dataset.tip = l.tip; a.setAttribute("aria-label", `${l.icon} ${l.tip}`);
+  a.innerHTML = `<svg viewBox="0 0 24 24"><path d="${ICONS[l.icon] || ""}"/></svg>`;
+  $("icons").appendChild(a);
 });
 
-$("views").textContent = `${CONFIG.views.toLocaleString()} views`;
-$("uid").textContent = `uid ${CONFIG.uid}`;
+$("views").textContent = CONFIG.views.toLocaleString();
 
-/* ---------- toast ---------- */
-let toastT;
-function toast(msg) {
-  const t = $("toast");
-  t.textContent = msg;
-  t.classList.add("on");
-  clearTimeout(toastT);
-  toastT = setTimeout(() => t.classList.remove("on"), 1600);
+/* ---------- discord presence (Lanyard) ---------- */
+$("dcName").textContent = CONFIG.links.find(l => l.icon === "discord")?.tip || "discord";
+$("dcPfp").src = CONFIG.avatarFallback;
+$("dcPfp").addEventListener("error", e => e.target.src = BLANK);
+
+async function presence() {
+  try {
+    const r = await fetch(`https://api.lanyard.rest/v1/users/${CONFIG.discordId}`);
+    const j = await r.json();
+    if (!j.success) return;
+    const d = j.data, u = d.discord_user;
+    if (u.avatar) {
+      const pfp = `https://cdn.discordapp.com/avatars/${u.id}/${u.avatar}.${u.avatar.startsWith("a_") ? "gif" : "png"}?size=256`;
+      $("dcPfp").src = pfp;
+      $("avatar").src = pfp;
+    }
+    $("dcName").textContent = u.global_name || u.username;
+    $("dcDot").className = `dot ${d.discord_status}`;
+
+    const custom = d.activities.find(a => a.type === 4);
+    const game   = d.activities.find(a => a.type === 0);
+    let text = d.discord_status === "offline" ? "offline" : d.discord_status;
+    if (d.listening_to_spotify && d.spotify) text = `listening to ${d.spotify.song}`;
+    else if (game) text = `playing ${game.name}`;
+    else if (custom && custom.state) text = custom.state;
+    $("dcAct").textContent = text;
+  } catch (e) { /* keep offline look */ }
 }
+presence();
+setInterval(presence, 30000);
 
-/* ---------- typing bio ---------- */
-const reduce = matchMedia("(prefers-reduced-motion: reduce)").matches;
-function typeBio() {
-  const el = $("bio");
-  if (reduce || CONFIG.bios.length < 1) { el.textContent = CONFIG.bios[0] || ""; return; }
-  let i = 0, c = 0, del = false;
-  (function tick() {
-    const s = CONFIG.bios[i];
-    el.textContent = s.slice(0, c);
-    if (!del && c < s.length) c++;
-    else if (!del) { del = true; return setTimeout(tick, 2200); }
-    else if (c > 0) c--;
-    else { del = false; i = (i + 1) % CONFIG.bios.length; }
-    setTimeout(tick, del ? 35 : 75);
-  })();
-}
-
-/* ---------- typing tab title ---------- */
-function typeTitle() {
-  const s = CONFIG.tabTitle; let c = 1, dir = 1;
-  setInterval(() => {
-    document.title = s.slice(0, c) || "‎";
-    c += dir;
-    if (c >= s.length) dir = -1;
-    if (c <= 1) dir = 1;
-  }, 400);
-}
-
-/* ---------- music player ---------- */
+/* ---------- player ---------- */
 const audio = $("audio");
-let ti = 0;
+const S = CONFIG.song;
+audio.src = S.src;
 audio.volume = $("vol").value = CONFIG.volume;
-const fmt = s => isNaN(s) ? "00:00" : `${String(Math.floor(s / 60)).padStart(2, "0")}:${String(Math.floor(s % 60)).padStart(2, "0")}`;
-const PLAY  = '<path d="M8 5v14l11-7z"/>';
-const PAUSE = '<path d="M6 5h4v14H6zM14 5h4v14h-4z"/>';
+$("plTitle").textContent = S.title;
+$("plArtist").textContent = S.artist;
+$("cover").src = S.cover || CONFIG.avatarFallback;
 
-function load(i, autoplay) {
-  ti = (i + CONFIG.tracks.length) % CONFIG.tracks.length;
-  const t = CONFIG.tracks[ti];
-  audio.src = t.src;
-  $("trackTitle").textContent = t.title;
-  $("trackArtist").textContent = t.artist;
-  $("cover").src = t.cover || CONFIG.avatar;
-  if (autoplay) audio.play().catch(() => {});
-}
-function setIcon() {
+const fmt = s => isNaN(s) ? "0:00" : `${Math.floor(s / 60)}:${String(Math.floor(s % 60)).padStart(2, "0")}`;
+const PLAY = '<path d="M8 5v14l11-7z"/>', PAUSE = '<path d="M6 5h4v14H6zM14 5h4v14h-4z"/>';
+const setIcon = () => {
   $("playIcon").innerHTML = audio.paused ? PLAY : PAUSE;
   $("playBtn").setAttribute("aria-label", audio.paused ? "Play" : "Pause");
-}
-
-if (!CONFIG.tracks.length) $("player").remove();
-else load(0, false);
+};
 
 $("playBtn").onclick = () => audio.paused ? audio.play() : audio.pause();
-$("prev").onclick = () => load(ti - 1, true);
-$("next").onclick = () => load(ti + 1, true);
 $("vol").oninput = e => audio.volume = e.target.value;
 audio.onplay = audio.onpause = setIcon;
-audio.onended = () => load(ti + 1, true);
+audio.onloadedmetadata = () => $("dur").textContent = fmt(audio.duration);
 audio.ontimeupdate = () => {
   $("cur").textContent = fmt(audio.currentTime);
   $("fill").style.width = (audio.currentTime / audio.duration * 100 || 0) + "%";
+  syncLyrics();
 };
-audio.onloadedmetadata = () => $("dur").textContent = fmt(audio.duration);
 $("bar").onclick = e => {
   const r = e.currentTarget.getBoundingClientRect();
   if (audio.duration) audio.currentTime = (e.clientX - r.left) / r.width * audio.duration;
 };
 
-/* ---------- card tilt (desktop only) ---------- */
+/* ---------- synced lyrics ---------- */
+let lines = [], current = -1;
+const LINE_H = 28;
+
+function parseLRC(text) {
+  const out = [];
+  text.split(/\r?\n/).forEach(row => {
+    const stamps = [...row.matchAll(/\[(\d+):(\d+(?:\.\d+)?)\]/g)];
+    const words = row.replace(/\[[^\]]*\]/g, "").trim();
+    stamps.forEach(m => out.push({ t: +m[1] * 60 + +m[2], text: words || "♪" }));
+  });
+  return out.sort((a, b) => a.t - b.t);
+}
+
+async function loadLyrics() {
+  const tries = [];
+  if (S.lrcFile) tries.push(() => fetch(S.lrcFile).then(r => r.ok ? r.text() : null));
+  if (S.lrclibId) tries.push(() => fetch(`https://lrclib.net/api/get/${S.lrclibId}`).then(r => r.ok ? r.json() : null).then(j => j && j.syncedLyrics));
+  tries.push(() => fetch(`https://lrclib.net/api/get?artist_name=${encodeURIComponent(S.artist)}&track_name=${encodeURIComponent(S.title)}`)
+    .then(r => r.ok ? r.json() : null).then(j => j && j.syncedLyrics));
+
+  for (const t of tries) {
+    try {
+      const lrc = await t();
+      if (lrc) { lines = parseLRC(lrc); break; }
+    } catch (e) { /* try next source */ }
+  }
+  if (!lines.length) return;
+
+  const ul = $("lyricList");
+  lines.forEach(l => {
+    const li = document.createElement("li");
+    li.textContent = l.text;
+    ul.appendChild(li);
+  });
+  ul.style.transform = `translateY(${LINE_H}px)`;
+  $("lyrics").hidden = false;
+}
+
+function syncLyrics() {
+  if (!lines.length) return;
+  const t = audio.currentTime + 0.15;
+  let i = -1;
+  for (let k = 0; k < lines.length; k++) { if (lines[k].t <= t) i = k; else break; }
+  if (i === current) return;
+  const items = $("lyricList").children;
+  if (items[current]) items[current].classList.remove("on");
+  if (items[i]) items[i].classList.add("on");
+  current = i;
+  // keep the active line in the middle row
+  $("lyricList").style.transform = `translateY(${LINE_H - Math.max(i, 0) * LINE_H}px)`;
+}
+
+loadLyrics();
+
+/* ---------- card tilt ---------- */
 const card = $("card");
 if (!reduce && matchMedia("(hover: hover)").matches) {
   document.addEventListener("mousemove", e => {
-    const x = (e.clientX / innerWidth - .5) * 8;
-    const y = (e.clientY / innerHeight - .5) * -8;
+    const x = (e.clientX / innerWidth - .5) * 7;
+    const y = (e.clientY / innerHeight - .5) * -7;
     card.style.transform = `rotateY(${x}deg) rotateX(${y}deg)`;
   });
 }
 
-/* ---------- click to enter ---------- */
+/* ---------- enter ---------- */
 function enter() {
   const gate = $("enter");
   if (gate.classList.contains("gone")) return;
   gate.classList.add("gone");
   card.classList.add("show");
-  if (CONFIG.tracks.length) audio.play().catch(() => {});
-  typeBio();
-  typeTitle();
-  setTimeout(() => gate.remove(), 700);
+  audio.play().catch(() => {});
+  bg.play && bg.play().catch(() => {});
+  setTimeout(() => gate.remove(), 800);
 }
 $("enter").addEventListener("click", enter);
 $("enter").addEventListener("keydown", e => { if (e.key === "Enter" || e.key === " ") enter(); });
